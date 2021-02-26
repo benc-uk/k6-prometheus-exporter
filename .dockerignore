@@ -1,0 +1,32 @@
+# Standard stuff
+Dockerfile*
+**/*Dockerfile*
+docker-compose*
+.dockerignore
+.git
+.gitignore
+readme.md
+README.md
+**/readme.md
+**/LICENSE
+.vscode/
+makefile
+CONTRIBUTING.md
+_config.yml
+
+# Dotenv secrets!
+**/.env
+
+# Outputs, binaries etc
+**/bin/
+**/obj/
+**/dist/
+**/node_modules/
+__pycache__
+*.pyc
+
+# Add more project specific folders here
+charts/
+build/
+deploy/
+samples/
