@@ -6,5 +6,5 @@ linters:
     - golint
     - gofmt
 issues:
-  include:
+  exclude:
     - EXC0002

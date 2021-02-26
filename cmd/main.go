@@ -8,8 +8,8 @@ import (
 	"time"
 )
 
-const K6_METRICS = "http://localhost:6565/v1/metrics"
-const K6_GROUPS = "http://localhost:6565/v1/groups"
+//const K6_METRICS = "http://localhost:6565/v1/metrics"
+//const K6_GROUPS = "http://localhost:6565/v1/groups"
 
 func metricsHandler(resp http.ResponseWriter, req *http.Request) {
 	fmt.Fprint(resp, "Hi there, I love!")

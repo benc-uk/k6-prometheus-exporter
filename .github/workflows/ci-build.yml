@@ -12,7 +12,7 @@ on:
 
 env:
   IMAGE_REG: ghcr.io
-  IMAGE_NAME: __CHANGE_ME__
+  IMAGE_NAME: benc-uk/k6-prometheus-exporter
   IMAGE_TAG: latest
 
 jobs:

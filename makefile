@@ -6,7 +6,7 @@ SRC_DIR := ./cmd
 
 # Most likely want to override these when calling `make image`
 IMAGE_REG ?= ghcr.io
-IMAGE_REPO ?= __CHANGE_ME__
+IMAGE_REPO ?= benc-uk/k6-prometheus-exporter
 IMAGE_TAG ?= latest
 IMAGE_PREFIX := $(IMAGE_REG)/$(IMAGE_REPO)
 
@@ -18,11 +18,11 @@ help:  ## This help message :)
 
 lint:  ## Lint & format, will not fix but sets exit code on error
 	@which golangci-lint > /dev/null || go get github.com/golangci/golangci-lint/cmd/golangci-lint
-	golangci-lint run $(SRC_DIR)/...
+	`go env GOPATH`/bin/golangci-lint run $(SRC_DIR)/...
 
 lint-fix:  ## Lint & format, will try to fix errors and modify code
 	@which golangci-lint > /dev/null || go get github.com/golangci/golangci-lint/cmd/golangci-lint
-	golangci-lint run $(SRC_DIR)/... --fix 
+	`go env GOPATH`/bin/golangci-lint run $(SRC_DIR)/... --fix 
 
 image:  ## Build container image from Dockerfile
 	docker build --file ./build/Dockerfile \
