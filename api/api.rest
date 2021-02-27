@@ -7,3 +7,7 @@ GET http://localhost:6565/v1/metrics
 ###
 
 GET http://localhost:6565/v1/groups
+
+###
+
+GET http://localhost:6565/v1/status

@@ -2,7 +2,7 @@
 // A generic load test script provided for example purposes and testing
 //
 
-import { check, sleep } from 'k6'
+import { check, group, sleep } from 'k6'
 import http from 'k6/http'
 
 const TARGET_URL = __ENV.TEST_TARGET || 'https://example.net'
@@ -24,7 +24,7 @@ export default function () {
   let res = http.get(TARGET_URL)
 
   check(res, {
-    'Status is ok': (r) => r.status === 200,
+    'Status is ok root': (r) => r.status === 200,
   })
 
   sleep(SLEEP)
