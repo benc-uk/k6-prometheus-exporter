@@ -7,9 +7,9 @@ import http from 'k6/http'
 
 const TARGET_URL = __ENV.TEST_TARGET || 'https://example.net'
 const RAMP_TIME = __ENV.RAMP_TIME || '5m'
-const RUN_TIME = __ENV.RAMP_TIME || '10m'
-const USER_COUNT = __ENV.VUS_MAX || 50
-const SLEEP = __ENV.VUS_MAX || 0
+const RUN_TIME = __ENV.RUN_TIME || '10m'
+const USER_COUNT = __ENV.USER_COUNT || 50
+const SLEEP = __ENV.SLEEP || 0
 
 // Very simple ramp up from zero to VUS_MAX over RAMP_TIME, then runs for further RUN_TIME
 export let options = {

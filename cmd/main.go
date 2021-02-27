@@ -20,9 +20,9 @@ type Metric struct {
 	}
 }
 
-const k6EndpointMetrics = "http://localhost:6565/v1/metrics"
+var k6EndpointMetrics = "http://localhost:6565/v1/metrics"
 
-//const k6EndpointGroups = "http://localhost:6565/v1/groups"
+//vark6EndpointGroups = "http://localhost:6565/v1/groups"
 
 func metricsHandler(resp http.ResponseWriter, req *http.Request) {
 
@@ -75,9 +75,16 @@ func main() {
 		serverPort = portEnv
 	}
 
+	k6ApiEndpoint := "http://localhost:6565/v1"
+	if endpoint := os.Getenv("K6_API_ENDPOINT"); endpoint != "" {
+		k6ApiEndpoint = endpoint + "/metrics"
+	}
+	k6EndpointMetrics = k6ApiEndpoint + "/metrics"
+
 	http.HandleFunc("/metrics", metricsHandler)
 
 	log.Printf("### k6 metrics proxy listening on %v\n", serverPort)
+	log.Printf("### API endpoint for k6: %s\n", k6ApiEndpoint)
 	srv := &http.Server{
 		Addr:         fmt.Sprintf(":%s", serverPort),
 		WriteTimeout: 10 * time.Second,
