@@ -24,7 +24,3 @@ spec:
               value: 'http://load-test:6565/v1'
           ports:
             - containerPort: 2112
-          resources:
-            limits:
-              cpu: 200m
-              memory: 200m

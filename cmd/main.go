@@ -149,7 +149,7 @@ func main() {
 
 	k6ApiEndpoint := "http://localhost:6565/v1"
 	if endpoint := os.Getenv("K6_API_ENDPOINT"); endpoint != "" {
-		k6ApiEndpoint = endpoint + "/metrics"
+		k6ApiEndpoint = endpoint
 	}
 	k6EndpointMetrics = k6ApiEndpoint + "/metrics"
 	k6EndpointGroups = k6ApiEndpoint + "/groups"
