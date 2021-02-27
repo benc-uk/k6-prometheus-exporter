@@ -12,7 +12,11 @@ spec:
         # Example of running k6, running the load-tests/generic.js script
         - name: k6
           image: loadimpact/k6
-          args: ['run', 'https://raw.githubusercontent.com/benc-uk/k6-prometheus-exporter/main/load-tests/generic.js']
+          args:
+            - 'run'
+            - 'https://raw.githubusercontent.com/benc-uk/k6-prometheus-exporter/main/load-tests/generic.js'
+            - '--address'
+            - '0.0.0.0:6565' # Important otherwise we can't connect
           env:
             # URL to test against - CHANGE THIS!!
             - name: TARGET_URL
