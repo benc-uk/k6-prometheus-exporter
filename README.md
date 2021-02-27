@@ -39,17 +39,14 @@ docker run ghcr.io/benc-uk/k6-prometheus-exporter:latest
 
 Example of some of the data shown in a Grafana dashboard
 
-![](./docs/screen1.png)
+![](./docs/screen2.png)
 
 # Configuration
 
-Details of any configuration files, environmental variables, command line parameters, etc.
-
-For services
-| Setting / Variable | Purpose | Default |
-| ------------------ | ------------------------------------------- | ------- |
-| METRICS*PORT | Port the server will listen on. | 2112 |
-| K6_API_ENDPOINT | Some very important setting. \*\*\_Required*\*\* | _None_ |
+| Setting / Variable | Purpose                                     | Default                    |
+| ------------------ | ------------------------------------------- | -------------------------- |
+| METRICS_PORT       | Port the server will listen on.             | 2112                       |
+| K6_API_ENDPOINT    | Override the endpoint used to connect to k6 | `http://localhost:6565/v1` |
 
 # Repository Structure
 
