@@ -1,0 +1,39 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: load-test
+spec:
+  template:
+    metadata:
+      # These are important, for Prometheus to pick up the data
+      annotations:
+        prometheus.io/port: '2112'
+        prometheus.io/scrape: 'true'
+    spec:
+      containers:
+        # Example of running k6, running the load-tests/generic.js script
+        - name: k6
+          image: loadimpact/k6
+          args: ['run', 'https://raw.githubusercontent.com/benc-uk/k6-prometheus-exporter/main/load-tests/generic.js']
+          env:
+            # URL to test against - CHANGE THIS!!
+            - name: TARGET_URL
+              value: 'https://benc.dev/'
+            # The ramp up time, e.g. 20s or 3m
+            - name: RAMP_TIME
+              value: '5m'
+            # The rest of the time the test runs
+            - name: RUN_TIME
+              value: '10m'
+            # Number of users to ramp up to and run for the RUN_TIME
+            - name: USER_COUNT
+              value: '50'
+
+        # Adds the k6-prometheus-exporter sidecar
+        - name: k6-exporter
+          image: ghcr.io/benc-uk/k6-prometheus-exporter:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 2112
+
+      restartPolicy: Never

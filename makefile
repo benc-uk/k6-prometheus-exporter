@@ -34,7 +34,7 @@ push:  ## Push container image to registry
 	docker push $(IMAGE_PREFIX):$(IMAGE_TAG)
 
 build:  ## Run a local build without a container
-	go build -o bin/k6-prometheus-exporter $(SRC_DIR)/...
+	CGO_ENABLED=0 GOOS=linux go build -o bin/k6-prometheus-exporter $(SRC_DIR)/...
 
 run:  ## Run application, used for local development
 	air -c .air.toml

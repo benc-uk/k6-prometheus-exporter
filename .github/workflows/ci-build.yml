@@ -12,7 +12,7 @@ on:
 
 env:
   IMAGE_REG: ghcr.io
-  IMAGE_NAME: benc-uk/k6-prometheus-exporter
+  IMAGE_REPO: benc-uk/k6-prometheus-exporter
   IMAGE_TAG: latest
 
 jobs:
@@ -31,11 +31,11 @@ jobs:
 
       # Build image
       - name: Build the container image
-        run: make image IMAGE_REPO=$GITHUB_ACTOR/$IMAGE_NAME
+        run: make image
 
       # Only when pushing to default branch (e.g. master or main), then push image to registry
       - name: Push to container registry
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         run: |
           echo ${{ secrets.REGISTRY_PASSWORD }} | docker login $IMAGE_REG -u $GITHUB_ACTOR --password-stdin
-          make push IMAGE_REPO=$GITHUB_ACTOR/$IMAGE_NAME
+          make push

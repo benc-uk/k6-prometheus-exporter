@@ -1,28 +1,83 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
 	"os"
+	"strings"
 	"time"
 )
 
-//const K6_METRICS = "http://localhost:6565/v1/metrics"
-//const K6_GROUPS = "http://localhost:6565/v1/groups"
+// Metric from k6 API
+type Metric struct {
+	ID         string
+	Attributes struct {
+		Type     string
+		Contains string
+		Sample   map[string]float64
+	}
+}
+
+const k6EndpointMetrics = "http://localhost:6565/v1/metrics"
+
+//const k6EndpointGroups = "http://localhost:6565/v1/groups"
 
 func metricsHandler(resp http.ResponseWriter, req *http.Request) {
-	fmt.Fprint(resp, "Hi there, I love!")
+
+	// Call the k6 metrics API
+	apiRes, err := http.Get(k6EndpointMetrics)
+	if err != nil || apiRes.StatusCode != 200 {
+		resp.WriteHeader(500)
+		var errorMsg string
+		if err != nil {
+			errorMsg = err.Error()
+		} else {
+			errorMsg = apiRes.Status
+		}
+		fmt.Fprintln(resp, errorMsg)
+		return
+	}
+
+	// Hold API result
+	metricData := struct {
+		Data []Metric
+	}{}
+
+	// JSON unmarshall
+	err = json.NewDecoder(apiRes.Body).Decode(&metricData)
+	if err != nil {
+		resp.WriteHeader(500)
+		fmt.Fprintln(resp, err.Error())
+		return
+	}
+
+	// Now build Prometheus exposition format
+	expoResult := ""
+	for _, metric := range metricData.Data {
+		metricName := metric.ID
+		for sampleName, sampleValue := range metric.Attributes.Sample {
+			sampleName = strings.ReplaceAll(sampleName, "(", "")
+			sampleName = strings.ReplaceAll(sampleName, ")", "")
+			expoResult += fmt.Sprintf("k6_%s_%s %f\n", metricName, sampleName, sampleValue)
+		}
+		expoResult += "\n"
+	}
+
+	// Return as HTTP response
+	_, _ = resp.Write([]byte(expoResult))
 }
 
 func main() {
-	serverPort := "8080"
-	if portEnv := os.Getenv("PORT"); portEnv != "" {
+	serverPort := "2112"
+	if portEnv := os.Getenv("METRICS_PORT"); portEnv != "" {
 		serverPort = portEnv
 	}
 
 	http.HandleFunc("/metrics", metricsHandler)
-	log.Printf("### Server listening on %v\n", serverPort)
+
+	log.Printf("### k6 metrics proxy listening on %v\n", serverPort)
 	srv := &http.Server{
 		Addr:         fmt.Sprintf(":%s", serverPort),
 		WriteTimeout: 10 * time.Second,

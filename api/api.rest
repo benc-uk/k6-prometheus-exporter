@@ -1,0 +1,9 @@
+GET http://localhost:2112/metrics
+
+###
+
+GET http://localhost:6565/v1/metrics
+
+###
+
+GET http://localhost:6565/v1/metrics
